@@ -1,0 +1,7 @@
+*.DS_Store
+*.iws
+*.iml
+*.ipr
+.idea
+lc_docker_compose*
+target/
