@@ -6,7 +6,7 @@ Example project with simple Akka HTTP server compiled with GraalVM native-image.
   * [GraalVM](https://github.com/oracle/graal/releases)
   * `native-image` from `GRAAL_HOME/bin` in `PATH`
   
-Note that the following example refers to *graalvm version 1.0.0-rc14*. if you use a different version you shoud update also *com.oracle.substratevm* version in `build.sbt`.
+Note that the following example refers to *Graal VM version 1.0.0-rc14*. If you use a different version you should update also *com.oracle.substratevm* dependancy version in `build.sbt`.
   
 Suggested environment variables:
 
