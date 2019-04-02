@@ -20,7 +20,7 @@ libraryDependencies ++= Seq(
 
   // required for substitutions
   // make sure the version matches GraalVM version used to run native-image
-  "com.oracle.substratevm" % "svm" % "1.0.0-rc12" % Provided,
+  "com.oracle.substratevm" % "svm" % "1.0.0-rc14" % Provided,
 )
 
 enablePlugins(GraalVMNativeImagePlugin)
