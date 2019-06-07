@@ -6,12 +6,16 @@ Example project with simple Akka HTTP server compiled with GraalVM native-image.
   * [GraalVM](https://github.com/oracle/graal/releases)
   * `native-image` from `GRAAL_HOME/bin` in `PATH`
   
-Note that the following example refers to *Graal VM version 1.0.0-rc14*. If you use a different version you should update also *com.oracle.substratevm* dependancy version in `build.sbt`.
+Note that the following example refers to *Graal VM version 19.0.0*. If you use a different version you should update also *com.oracle.substratevm* dependency version in `build.sbt`.
   
 Suggested environment variables:
 
-    export GRAAL_HOME=/Library/Java/JavaVirtualMachines/graalvm-ce-1.0.0-rc14/Contents/Home
+    export GRAAL_HOME=/Library/Java/JavaVirtualMachines/graalvm-ce-19.0.0/Contents/Home
     export PATH=$PATH:${GRAAL_HOME}/bin
+    
+[Install native-image](https://www.graalvm.org/docs/reference-manual/aot-compilation/#install-native-image):
+
+    gu install native-image
   
 ## Compiling
     
@@ -47,10 +51,19 @@ Otherwise you'll get [an error from Akka's machinery](https://github.com/akka/ak
 ### HTTPS
 Passing the `--enable-url-protocols=https` option to `native-image` enables JCE features.
 
+### Affinity Pool
+`akka.dispatch.affinity.AffinityPool` is using MethodHandles which causes errors like this one
+during native image build:
+
+    Error: com.oracle.graal.pointsto.constraints.UnsupportedFeatureException: Invoke with MethodHandle argument could not be reduced to at most a single call: java.lang.invoke.MethodHandle.bindTo(Object)
+    
+The workaround is to initialize affected classes (and we actually do this for the whole classpath)
+at build time using the `--initalize-at-build-time` option.
+
 ### Lightbend Config
-To ensure that environment variables and Java system properties defined at *runtime* are used
-to resolve the configuration static initializers of `com.typesafe.config.impl.ConfigImpl$EnvVariablesHolder`
-and `com.typesafe.config.impl.ConfigImpl$SystemPropertiesHolder` need to be re-run at runtime.
+Static initializers of `com.typesafe.config.impl.ConfigImpl$EnvVariablesHolder`
+and `com.typesafe.config.impl.ConfigImpl$SystemPropertiesHolder` need to be run at runtime using
+the `--initialize-at-run-time` option.
 Otherwise the environment from image build time will be baked in to the configuration.
 
 ### Akka Scheduler and sun.misc.Unsafe

@@ -20,7 +20,7 @@ libraryDependencies ++= Seq(
 
   // required for substitutions
   // make sure the version matches GraalVM version used to run native-image
-  "com.oracle.substratevm" % "svm" % "1.0.0-rc14" % Provided,
+  "com.oracle.substratevm" % "svm" % "19.0.0" % Provided,
 )
 
 enablePlugins(GraalVMNativeImagePlugin)
@@ -31,7 +31,9 @@ graalVMNativeImageOptions ++= Seq(
   "-H:ReflectionConfigurationFiles=" + baseDirectory.value / "graal" / "reflectconf-akka.json",
   "-H:ReflectionConfigurationFiles=" + baseDirectory.value / "graal" / "reflectconf-jul.json",
   "--enable-url-protocols=https,http",
-  "--rerun-class-initialization-at-runtime=" +
+  "--initialize-at-build-time",
+  "--initialize-at-run-time=" +
     "com.typesafe.config.impl.ConfigImpl$EnvVariablesHolder," +
-    "com.typesafe.config.impl.ConfigImpl$SystemPropertiesHolder"
+    "com.typesafe.config.impl.ConfigImpl$SystemPropertiesHolder",
+  "--no-fallback"
 )
