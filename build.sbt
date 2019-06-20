@@ -4,10 +4,13 @@ organization := "com.github.vmencik"
 
 version := "0.1"
 
-scalaVersion := "2.12.8"
+scalaVersion := "2.13.0"
 
-val akkaVersion = "2.5.21"
-val akkaHttpVersion = "10.1.7"
+val akkaVersion = "2.5.23"
+val akkaHttpVersion = "10.1.8"
+val graalAkkaVersion = "0.4.1"
+
+resolvers += Resolver.sonatypeRepo("releases")
 
 libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-actor" % akkaVersion,
@@ -18,22 +21,20 @@ libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2",
   "org.slf4j" % "slf4j-jdk14" % "1.7.26", // java.util.logging works mostly out-of-the-box with SubstrateVM
 
-  // required for substitutions
-  // make sure the version matches GraalVM version used to run native-image
-  "com.oracle.substratevm" % "svm" % "19.0.0" % Provided,
+  "com.github.vmencik" %% "graal-akka-http" % graalAkkaVersion,
+  "com.github.vmencik" %% "graal-akka-slf4j" % graalAkkaVersion
+
 )
 
 enablePlugins(GraalVMNativeImagePlugin)
 
 graalVMNativeImageOptions ++= Seq(
-  "-H:IncludeResources=.*conf",
   "-H:IncludeResources=.*\\.properties",
-  "-H:ReflectionConfigurationFiles=" + baseDirectory.value / "graal" / "reflectconf-akka.json",
   "-H:ReflectionConfigurationFiles=" + baseDirectory.value / "graal" / "reflectconf-jul.json",
-  "--enable-url-protocols=https,http",
   "--initialize-at-build-time",
   "--initialize-at-run-time=" +
     "com.typesafe.config.impl.ConfigImpl$EnvVariablesHolder," +
     "com.typesafe.config.impl.ConfigImpl$SystemPropertiesHolder",
-  "--no-fallback"
+  "--no-fallback",
+  "--allow-incomplete-classpath"
 )
