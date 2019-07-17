@@ -33,6 +33,7 @@ graalVMNativeImageOptions ++= Seq(
   "-H:ReflectionConfigurationFiles=" + baseDirectory.value / "graal" / "reflectconf-jul.json",
   "--initialize-at-build-time",
   "--initialize-at-run-time=" +
+    "akka.protobuf.DescriptorProtos," +
     "com.typesafe.config.impl.ConfigImpl$EnvVariablesHolder," +
     "com.typesafe.config.impl.ConfigImpl$SystemPropertiesHolder",
   "--no-fallback",

@@ -25,7 +25,7 @@ It might take a few minutes to compile.
    
 ## Running
     
-    ./target/graalvm-native-image/akka-graal-native -Djava.library.path=${GRAAL_HOME}/jre/lib
+    ./target/graalvm-native-image/akka-graal-native -Djava.library.path=${GRAAL_HOME}/jre/lib/amd64
     
 Because the project is compiled with
 [Java Crypto enabled](https://github.com/oracle/graal/blob/master/substratevm/JCA-SECURITY-SERVICES.md)
