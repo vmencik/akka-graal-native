@@ -6,11 +6,9 @@ Example project with simple Akka HTTP server compiled with GraalVM native-image.
   * [GraalVM](https://github.com/oracle/graal/releases)
   * `native-image` from `GRAAL_HOME/bin` in `PATH`
   
-Note that the following example refers to *Graal VM version 19.0.2*. If you use a different version you should update also *com.oracle.substratevm* dependency version in `build.sbt`.
-  
 Suggested environment variables:
 
-    export GRAAL_HOME=/Library/Java/JavaVirtualMachines/graalvm-ce-19.0.2/Contents/Home
+    export GRAAL_HOME=/Library/Java/JavaVirtualMachines/graalvm-ce-19.1.1/Contents/Home
     export PATH=$PATH:${GRAAL_HOME}/bin
     
 [Install native-image](https://www.graalvm.org/docs/reference-manual/aot-compilation/#install-native-image):
@@ -25,7 +23,11 @@ It might take a few minutes to compile.
    
 ## Running
     
+    # MacOS:
     ./target/graalvm-native-image/akka-graal-native -Djava.library.path=${GRAAL_HOME}/jre/lib
+    
+    # Linux:
+    ./target/graalvm-native-image/akka-graal-native -Djava.library.path=${GRAAL_HOME}/jre/lib/amd64
     
 Because the project is compiled with
 [Java Crypto enabled](https://github.com/oracle/graal/blob/master/substratevm/JCA-SECURITY-SERVICES.md)
